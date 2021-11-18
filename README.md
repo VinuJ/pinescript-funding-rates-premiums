@@ -1,4 +1,4 @@
-# TradingView Binance Premium Index and Funding Rate Pine Script
+# TradingView Binance Premium Index and Funding Rates in Pine Script
 
 In-progress script made in Pine for tradingview.com that plots BTCUSDT Perpetual Premium Index on the Binance exchange
 and calculates Funding Rates accordingly.
