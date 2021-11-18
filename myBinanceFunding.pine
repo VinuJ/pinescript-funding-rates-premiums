@@ -1,0 +1,32 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © supermortalcoil
+// https://www.binance.com/en/futures/funding-history/0
+//
+// Funding Rate = Premium Index + clamp ( Interest Rate - Premium Index, 0.05%, -0.05% )
+//
+// Average Premium Index (P) = (1*Premium_Index_1+2*Premium_Index_2+3*Premium_Index_3+···+·480*Premium_index_480) / (1+2+3+···+480)
+// 
+// *Premium_Index_1: the premium index at the first minute
+//
+//
+//
+//@version=5
+
+
+indicator("My Script")
+
+// Helpers
+clamp (x, min, max) => math.max(min, math.min(max, x))
+
+interestRate = 0.01
+
+// Premium Index
+p = request.security("BINANCE:BTCUSDT_PREMIUM", "", close)*100
+
+s = ta.barssince(hour == 0)
+
+//b = ta.barssince()
+plot(p, title="Premium Index", style=plot.style_histogram, linewidth=5, color=color.orange)
+
+plot(s, color=color.blue)
+
