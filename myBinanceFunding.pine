@@ -16,17 +16,37 @@
 indicator("My Script")
 
 // Helpers
-clamp (x, min, max) => math.max(min, math.min(max, x))
+clamp(num, min, max) => math.min(math.max(num, min), max)
+
+bool isFundingBar = ((hour == 0 or hour == 8 or hour == 16) and (minute == 0)) or timeframe.isdwm
 
 interestRate = 0.01
+mmr = 0.4
 
 // Premium Index
-p = request.security("BINANCE:BTCUSDT_PREMIUM", "", close)*100
+p = request.security("BINANCE:BTCUSDT_PREMIUM", "", close)*100 // correct value in %
 
-s = ta.barssince(hour == 0)
+// Time Weighted Moving Average
+twap(source, length) =>
+    norm = 0.0
+    sum = 0.0
+    for i = 1 to length+1
+        weight = i * source
+        norm := norm + weight
+        sum := sum + source[i] * weight
+    sum / norm
+
+// Funding Rate
+
+f = P + clamp(interestRate-p, -0.05, 0.05) 
+
+// Capped Funding Rate
+
+// floor = -0.75 * mmr
+// cap = 0.75 * mmr
+
+// cF = clamp(f, floor, cap)
 
 //b = ta.barssince()
-plot(p, title="Premium Index", style=plot.style_histogram, linewidth=5, color=color.orange)
-
-plot(s, color=color.blue)
-
+//plot(p, title="Premium Index", style=plot.style_histogram, linewidth=5, color=color.orange)
+plot(f, title="Funding Rate", style=plot.style_histogram, linewidth=5, color= color.blue)
